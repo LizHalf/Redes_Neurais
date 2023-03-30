@@ -154,7 +154,7 @@ def funcao_objetivo_pop_cnb(populacao):
     Args:
         populacao: lista com todos os individuos da populacao
     Returns:
-        Ums lista com o fitness de cada individuo em ordem
+        Uma lista com o fitness de cada individuo em ordem
     '''
     fitness_pop = []
     for individuo in populacao:
@@ -199,3 +199,90 @@ def individuo_cnb(n_genes, valor_max_caixa):
         gene = gene_cnb(valor_max_caixa)
         individuo.append(gene)
     return individuo
+
+def mutacao_senha (individuo, letras):
+    """Realiza a mutação de genes no problema das senhas
+    Args:
+        individuo: uma lista representando um individuo no problema das senhas
+        letras: caracteres possiveis de serem sorteados
+    Return:
+        Um individuo (senha) com gene mutado
+    """
+    gene = random.randint(0, len(individuo)-1)
+    individuo[gene] = gene_letra(letras)
+    return individuo
+
+
+def funcao_objetivo_pop_senha(populacao, senha_verdadeira):
+    """Computa a funcao objetivo de uma populaçao no problema da senha.
+    Args:
+      populacao: lista com todos os individuos da população
+      senha_verdadeira: a senha que você está tentando descobrir
+    Returns:
+      Lista contendo os valores da métrica de distância entre senhas.
+    """
+    resultado = []
+
+    for individuo in populacao:
+        resultado.append(funcao_objetivo_senha(individuo, senha_verdadeira))
+
+    return resultado
+
+
+
+
+#funcoes que eu estava testando e nao deram certo
+
+#def funcao_objetivo_pop_senha(populacao, senha):
+#    '''Calcula a função objetivo para todos os membros de uma população.
+    
+#    Args:
+#        populacao: lista com todos os individuos da população.
+#        senha: string representando a senha que se quer descobrir.
+#    
+#    Returns:
+#        Lista de valores representando a fitness de cada individuo da população.
+#    '''
+#    fitness = []
+#    for individuo in populacao:
+#        acertos = sum(1 for i in range(len(senha)) if individuo[i] == senha[i])
+#        fitness.append(acertos)
+#    return fitness
+
+
+def gene_letra(letras):
+    """Função auxiliar que sorteia uma letra do alfabeto.
+    Args:
+        letras: caracteres possiveis de serem sorteados
+    Return:
+        Um caractere escolhido aleatoriamente entre as letras passadas.
+    """
+    return random.choice(letras)
+
+def selecao_torneio_min(populacao, fitness, num_comb):
+    """Seleciona o indivíduo com menor fitness em um torneio.
+    Args:
+        populacao: lista com todos os individuos da população
+        fitness: valor do individuo
+        num_comb: número de combatentes do torneio
+    Return:
+        O individuo vencedor do problema
+    """
+    combatentes = random.sample(populacao, num_comb)
+    fitness_comb = [fitness[populacao.index(c)] for c in combatentes]
+    vencedor = combatentes[fitness_comb.index(min(fitness_comb))]
+    return vencedor
+
+
+
+
+
+def populacao_inicial_senha(tam_pop, letras, num_genes):
+    """Gera uma população inicial para o problema da senha."""
+    populacao = []
+    for i in range(tam_pop):
+        individuo = [gene_letra(letras) for _ in range(num_genes)]
+        populacao.append(individuo)
+    return populacao
+
+
